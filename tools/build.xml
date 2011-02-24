@@ -1,0 +1,247 @@
+<project name="Pixlib Developement">
+
+	<xmlproperty file="../../../.project" />
+
+	<property name="project.dir" value="${basedir}/.." />
+	<property name="project.src.dir" value="${project.dir}/src" />
+	<property name="project.bin.dir" value="${project.dir}/bin" />
+	<property name="project.lib.dir" value="${project.dir}/libs" />
+	<property name="project.doc.dir" value="${project.dir}/doc" />
+
+	<property name="test.dir" value="${project.dir}/test" />
+	<property name="test.runner" value="../../../tools/flexunit" />
+	<property name="test.output" value="${project.bin.dir}/TestRunner.swf" />
+
+	<property name="pixlib.library" value="${project.dir}/../../framework/palmer/bin/" />
+	<property name="pixlib.livedoc" value="http://www.pixlib.net/framework/doc" />
+	
+	<property name="pixlib.ftp.host" value="" />
+	<property name="pixlib.ftp.user" value="" />
+	<property name="pixlib.ftp.pass" value="" />
+
+	<target name="extension.package()">
+		<sequential>
+			<fdt.launch.library projectname="${projectDescription.name}" debug="false" target="${project.bin.dir}/${surname}.swc" compilerarguments="-external-library-path+=${pixlib.library} -external-library-path+=${project.lib.dir}" />
+			
+			<fdt.loadProjectProperties />
+			
+			<unzip src="${project.bin.dir}/${surname}.swc" dest="${project.bin.dir}">
+				<patternset>
+					<include name="library.swf" />
+				</patternset>
+			</unzip>
+			<move file="${project.bin.dir}/library.swf" tofile="${project.bin.dir}/${surname}.swf" />
+			<delete file="${project.bin.dir}/library.swf" />
+
+			<java jar="${FDTProjectSdkPath}/lib/optimizer.jar" fork="true" failonerror="true">
+				<jvmarg line="-ea -DAS3 -DAVMPLUS -Dflexlib=${FDTProjectSdkPath}/frameworks -Xms32m -Xmx384m -Dsun.io.useCanonCaches=false" />
+				<arg line="'${project.bin.dir}/${surname}.swf' --output '${project.bin.dir}/${surname}.swf' " />
+			</java>
+
+			<eclipse.refreshLocal resource="${project.bin.dir}" depth="1" />
+		</sequential>
+
+		<echo>SWC and SWF Libraries created for ${name}</echo>
+		<echo>${project.bin.dir}/${surname}.swc</echo>
+		<echo>${project.bin.dir}/${surname}.swf</echo>
+	</target>
+
+	<target name="core.package()">
+		<sequential>
+			<fdt.launch.library projectname="${projectDescription.name}" debug="false" target="${project.bin.dir}/${surname}.swc" />
+
+			<unzip src="${project.bin.dir}/${surname}.swc" dest="${project.bin.dir}">
+				<patternset>
+					<include name="library.swf" />
+				</patternset>
+			</unzip>
+			<move file="${project.bin.dir}/library.swf" tofile="${project.bin.dir}/${surname}.swf" />
+			<delete file="${project.bin.dir}/library.swf" />
+			
+			<fdt.loadProjectProperties />
+				
+			<java jar="${FDTProjectSdkPath}/lib/optimizer.jar" fork="true" failonerror="true">
+				<jvmarg line="-ea -DAS3 -DAVMPLUS -Dflexlib=${FDTProjectSdkPath}/frameworks -Xms32m -Xmx384m -Dsun.io.useCanonCaches=false" />
+				<arg line="'${project.bin.dir}/${surname}.swf' --output '${project.bin.dir}/${surname}.swf' " />
+			</java>
+
+			<eclipse.refreshLocal resource="${project.bin.dir}" depth="1" />
+		</sequential>
+
+		<echo>SWC and SWF Libraries created for ${name}</echo>
+		<echo>${project.bin.dir}/${surname}.swc</echo>
+		<echo>${project.bin.dir}/${surname}.swf</echo>
+	</target>
+
+	<target name="extension.doc()">
+		<sequential>
+			<mkdir dir="${project.doc.dir}" />
+
+			<delete includeemptydirs="true">
+				<fileset dir="${project.doc.dir}" includes="**/*" />
+			</delete>
+
+			<property name="srcTMP" value="${project.dir}/.srctmp" />
+			<delete dir="${srcTMP}" />
+			<mkdir dir="${srcTMP}" />
+			<copy todir="${srcTMP}">
+				<fileset dir="${project.src.dir}" />
+			</copy>
+
+			<replace dir="${srcTMP}">
+				<replacefilter token="PIXLIB_DOC" value="${pixlib.livedoc}/pixlib" />
+			</replace>
+
+			<fdt.loadProjectProperties />
+			
+			<java jar="${FDTProjectSdkPath}/lib/asdoc.jar" dir="${FDTProjectSdkPath}/frameworks" fork="true" failonerror="true">
+				<arg line="-load-config ${FDTProjectSdkPath}/frameworks/air-config.xml" />
+				<arg line="-external-library-path+=${project.lib.dir}" />
+				<arg line="-external-library-path+=${pixlib.library}" />
+				<arg line="-templates-path=${FDTProjectPath}/tools/asdoc_template" />
+				<arg line="-doc-sources ${srcTMP}" />
+				<arg line="-source-path ${srcTMP}" />
+				<arg line="-output ${project.doc.dir}" />
+				<arg line="-window-title '${name}'" />
+				<arg line="-main-title '${name}'" />
+				<arg line="-footer '${name}'" />
+				<arg line="-metadata.contributor '${author}'" />
+				<arg line="-metadata.creator '${author}'" />
+				<arg line="-metadata.description '${name}'" />
+				<arg line="-metadata.publisher '${author}'" />
+			</java>
+
+			<delete dir="${srcTMP}" />
+
+			<exec executable="open" dir=".">
+				<arg line="${project.doc.dir}/index.html" />
+			</exec>
+
+			<eclipse.refreshLocal resource="${project.doc.dir}" depth="1" />
+
+			<echo>Documentation created for ${name}</echo>
+			<echo>${project.doc.dir}</echo>
+		</sequential>
+	</target>
+
+	<target name="core.doc()">
+		<sequential>
+			<mkdir dir="${project.doc.dir}" />
+
+			<delete includeemptydirs="true">
+				<fileset dir="${project.doc.dir}" includes="**/*" />
+			</delete>
+
+			<property name="srcTMP" value="${project.dir}/.srctmp" />
+			<delete dir="${srcTMP}" />
+			<mkdir dir="${srcTMP}" />
+			<copy todir="${srcTMP}">
+				<fileset dir="${project.src.dir}" />
+			</copy>
+
+			<replace dir="${srcTMP}">
+				<replacefilter token="PIXLIB_DOC" value="${pixlib.livedoc}/pixlib" />
+			</replace>
+
+			<fdt.loadProjectProperties />
+
+			<java jar="${FDTProjectSdkPath}/lib/asdoc.jar" dir="${FDTProjectSdkPath}/frameworks" fork="true" failonerror="true">
+				<arg line="-load-config ${FDTProjectSdkPath}/frameworks/air-config.xml" />
+				<arg line="-doc-sources ${srcTMP}" />
+				<arg line="-source-path ${srcTMP}" />
+				<arg line="-templates-path=${FDTProjectPath}/tools/asdoc_template" />
+				<arg line="-output ${project.doc.dir}" />
+				<arg line="-window-title '${name}'" />
+				<arg line="-main-title '${name}'" />
+				<arg line="-footer '${name}'" />
+				<arg line="-metadata.contributor '${author}'" />
+				<arg line="-metadata.creator '${author}'" />
+				<arg line="-metadata.description '${name}'" />
+				<arg line="-metadata.publisher '${author}'" />
+			</java>
+
+			<delete dir="${srcTMP}" />
+
+			<exec executable="open" dir=".">
+				<arg line="${project.doc.dir}/index.html" />
+			</exec>
+
+			<eclipse.refreshLocal resource="${project.doc.dir}" depth="1" />
+
+			<echo>Documentation created for ${name}</echo>
+			<echo>${project.doc.dir}</echo>
+		</sequential>
+	</target>
+
+	<target name="test()">
+		<sequential>
+			<propertyfile file="${test.runner}/.testpath">
+				<entry key="path" type="string" value="${test.dir}" />
+			</propertyfile>
+			<replace file="${test.runner}/.testpath" token="/build/../test" value="/test" />
+			<property file="${test.runner}/.testpath" />
+			<property name="unit.source.path" value="${path}" />
+
+			<fileset id="unit.fileset" dir="${unit.source.path}">
+				<include name="**/*.as" />
+			</fileset>
+
+			<pathconvert property="unit.import" pathsep="${line.separator}" refid="unit.fileset" targetos="unix">
+				<mapper>
+					<chainedmapper>
+						<globmapper from="${unit.source.path}${file.separator}*" to="*" handledirsep="true" />
+						<mapper type="package" from="*.as" to="import *;" />
+					</chainedmapper>
+				</mapper>
+			</pathconvert>
+			<property name="unit.output.import.path" value="${test.runner}/import.txt" />
+			<echo file="${unit.output.import.path}">${unit.import}</echo>
+
+			<pathconvert property="unit.classes" pathsep="${line.separator}" refid="unit.fileset" targetos="unix">
+				<mapper>
+					<chainedmapper>
+						<globmapper from="${unit.source.path}${file.separator}*" to="*" handledirsep="true" />
+						<mapper type="package" from="*.as" to="*" />
+						<scriptmapper language="javascript">
+							  self.addMappedName("public var _test" + source.split(".").join("") + " : " + source + ";");
+							</scriptmapper>
+					</chainedmapper>
+				</mapper>
+			</pathconvert>
+
+			<property name="unit.output.test.path" value="${test.runner}/tests.txt" />
+			<echo file="${unit.output.test.path}">${unit.classes}</echo>
+
+			<fdt.launch.application projectname="${projectDescription.name}" debug="false" mainclass="${test.runner}/PixlibTest.mxml" target="${test.output}" startswf="true" swflauncher="Adobe Flash Player" compilerarguments="-library-path+=${test.runner}/libs" />
+
+			<delete file="${test.runner}/.testpath" />
+			<delete file="${test.runner}/import.txt" />
+			<delete file="${test.runner}/tests.txt" />
+		</sequential>
+	</target>
+
+	<target name="zip()">
+		
+	</target>
+
+	<target name="ftp()">
+		<ftp action="mkdir" server="${pixlib.ftp.host}" userid="${pixlib.ftp.user}" password="${pixlib.ftp.pass}" remotedir="/doc/${surname}" />
+
+		<ftp server="${pixlib.ftp.host}" port="21" remotedir="/doc/${surname}" userid="${pixlib.ftp.user}" password="${pixlib.ftp.pass}" passive="yes" binary="no">
+			<fileset dir="${project.doc.dir}" />
+		</ftp>
+
+		<ftp action="mkdir" server="${pixlib.ftp.host}" userid="${pixlib.ftp.user}" password="${pixlib.ftp.pass}" remotedir="/bin/${surname}" />
+		<ftp server="${pixlib.ftp.host}" port="21" remotedir="/bin/${surname}" userid="${pixlib.ftp.user}" password="${pixlib.ftp.pass}" passive="yes" binary="no">
+			<fileset dir="${project.bin.dir}">
+				<include name="${surname}.swc" />
+				<include name="${surname}.swf" />
+			</fileset>
+		</ftp>
+		<echo>FTP Transfert complete for ${name}</echo>
+		<echo>/bin/${surname}/${surname}.swc</echo>
+		<echo>/bin/${surname}/${surname}.swf</echo>
+		<echo>/doc/${surname}/</echo>
+	</target>
+
+</project>

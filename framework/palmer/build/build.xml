@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Pixlib Core Framework">
+
+	<property file="../build/project.properties" />
+	<import file="../../../tools/build.xml" />
+	
+	<target name="2. Run Unit Tests" description="2. Run Unit Tests">
+		<antcall target="test()">
+			<param name="name" value="${project.name}" />
+			<param name="author" value="${project.author}" />
+		</antcall>
+	</target>
+	
+	<target name="3. Package extension" description="3. Package extension">
+		<antcall target="core.package()">
+			<param name="name" value="${project.name}" />
+			<param name="surname" value="${project.surname}" />
+		</antcall>
+	</target>
+
+	<target name="4. Build documentation" description="4. Build documentation">
+		<antcall target="core.doc()">
+			<param name="name" value="${project.name}" />
+			<param name="author" value="${project.author}" />
+		</antcall>
+	</target>
+
+	<target name="5. Build zip package" description="5. Build zip package">
+		<antcall target="zip()">
+			<param name="name" value="${project.name}" />
+			<param name="surname" value="${project.surname}" />
+		</antcall>
+	</target>
+
+	<target name="6. Transfert to pixlib.net" description="6. Transfert to pixlib.net">
+		<antcall target="ftp()">
+			<param name="name" value="${project.name}" />
+			<param name="surname" value="${project.surname}" />
+		</antcall>
+	</target>
+
+</project>
