@@ -299,8 +299,6 @@ package net.pixlib.log.layout
 		/** @private */		
 		protected function _send( evt : AirLoggerEvent ) : void
 		{
-			trace("_send");
-			trace(_bIdentified);
 			if( _bIdentified )
 			{
 				_lcOut.send(_getOutConnectionName(_sID), evt.type, evt);
