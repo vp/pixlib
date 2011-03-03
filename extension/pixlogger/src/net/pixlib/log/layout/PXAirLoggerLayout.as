@@ -50,7 +50,7 @@ package net.pixlib.log.layout
 		private static var _oI : PXAirLoggerLayout = null;
 
 		/** @private */		
-		protected static const LOCALCONNECTION_ID : String = "_AIRLogManager_CONSOLE";
+		protected static const LOCALCONNECTION_ID : String = "_AIRLOGGER_CONSOLE";
 		
 		/** @private */	
 		protected static const OUT_SUFFIX : String = "_IN";
@@ -299,6 +299,8 @@ package net.pixlib.log.layout
 		/** @private */		
 		protected function _send( evt : AirLoggerEvent ) : void
 		{
+			trace("_send");
+			trace(_bIdentified);
 			if( _bIdentified )
 			{
 				_lcOut.send(_getOutConnectionName(_sID), evt.type, evt);
