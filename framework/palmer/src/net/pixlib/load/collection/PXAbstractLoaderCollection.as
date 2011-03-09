@@ -730,22 +730,6 @@ package net.pixlib.load.collection
 		 */
 		override protected function onInitialize() : void
 		{
-			if ( name != null )
-			{
-				if ( !(PXLoaderLocator.getInstance().isRegistered(name)) )
-				{
-					bMustUnregister = true;
-					PXLoaderLocator.getInstance().register(name, this);
-				}
-				else
-				{
-					bMustUnregister = false;
-					var msg : String = " can't be registered to " + PXLoaderLocator.getInstance() + " with '" + name + "' name. This name already exists.";
-					fireOnLoadErrorEvent(msg);
-					throw new PXIllegalArgumentException(msg, this);
-				}
-			}
-
 			if ( !empty && (oCurrentLoader != null) ) fireEventType(PXLoaderEvent.onLoadProgressEVENT);
 			fireEventType(PXLoaderEvent.onLoadInitEVENT);
 		}
