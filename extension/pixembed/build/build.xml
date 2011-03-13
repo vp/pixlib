@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="Pixlib Extension::PixEmbed" default="1. Help">
+<project name="Pixlib Extension::PixEmbed">
 
 	<property file="../build/project.properties" />
 	<import file="../../../tools/build.xml" />
