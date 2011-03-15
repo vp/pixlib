@@ -75,23 +75,23 @@ package net.pixlib.load.collection
 		// --------------------------------------------------------------------
 		// Protected properties
 		// --------------------------------------------------------------------
-		
+
 		/** Current loader index. */
 		protected var nIndex : int;
-		
+
 		/** Current target loader. */
 		protected var oCurrentLoader : PXLoader;
-		
+
 		/** Amount of successfully loader loaded. */
 		protected var nSuccess : uint;
-		
+
 		/**
 		 *  Stores the bypass error behaviour.
 		 *  
 		 *  @see CollectionLoader#bypassError
 		 */
 		protected var bByPassError : Boolean;
-		
+
 		/** private */
 		protected var bProcessing : Boolean;
 
@@ -594,9 +594,9 @@ package net.pixlib.load.collection
 		 */
 		protected function onLoaderLoadInit(event : PXLoaderEvent) : void
 		{
-			fireCollectionEventType(PXLoaderCollectionEvent.onItemLoadInitEVENT, oCurrentLoader);
-			
 			nSuccess++;
+
+			fireCollectionEventType(PXLoaderCollectionEvent.onItemLoadInitEVENT, oCurrentLoader);
 
 			checkNextLoader();
 		}
@@ -692,7 +692,7 @@ package net.pixlib.load.collection
 		protected function startNextLoader() : void
 		{
 			oCurrentLoader = getLoaderAt(nIndex);
-			
+
 			if ( !oCurrentLoader.request )
 			{
 				var msg : String = " encounters PXLoader instance without url property, load fails : " + oCurrentLoader.name;
