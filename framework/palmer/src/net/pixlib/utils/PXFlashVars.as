@@ -25,7 +25,7 @@ package net.pixlib.utils
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 	import flash.utils.getDefinitionByName;
-
+	
 	/**
 	 * The PXFlashVars class stores flashvars in basic Dictionary structure.
 	 * 
@@ -39,11 +39,11 @@ package net.pixlib.utils
 		//--------------------------------------------------------------------
 		// Private properties
 		//--------------------------------------------------------------------
-
+		
 		private static  var _oI : PXFlashVars ;
-
+		
 		private var _keys : Vector.<String>;		
-
+		
 		
 		//--------------------------------------------------------------------
 		// Public Properties
